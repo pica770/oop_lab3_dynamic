@@ -17,13 +17,17 @@ private:
 	unsigned int count;
 	Info* data;
 
+	void destroy();
+
 public:
 	table();	//конструктор по умолчанию
 	table(Info* elem, int n);	//конструктор из массива
 	table(const table& t); //конструктор копирования
+	table(table&& t); //конструктор перемещения
 	~table();	// деструктор
 
 	table& operator= (const table& t); //оператор присваивания
+	table& operator=(table&& t); //оператор перемещения
 
 	table& operator+= (const Info& t);
 	table& operator-= (const Info& t);
