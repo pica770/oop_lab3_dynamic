@@ -1,6 +1,12 @@
 #include "table.h"
 #include <string.h>
 
+void table::destroy()
+{
+    if (data)
+        delete[] data;
+}
+
 table::table() : count(0) //обнуляем число элементов
 {
     data = new Info[size];
@@ -8,7 +14,7 @@ table::table() : count(0) //обнуляем число элементов
 
 table::~table()
 {
-    delete[] data;
+    destroy();
 }
 
 table::table(Info* elem, int n)
@@ -18,7 +24,7 @@ table::table(Info* elem, int n)
 
     for (int i = 0; i < n; i++) { //идём по элементам
         *this += elem[i];
-    }ф
+    }
 }
 
 table::table(const table& t) //конструктор копирования
@@ -31,6 +37,15 @@ table::table(const table& t) //конструктор копирования
         data[i].busy = t.data[i].busy;
         strcpy(data[i].data, t.data[i].data);
     }
+}
+
+table::table(table&& t)
+{
+    size = t.size;
+    count = t.count;
+    data = t.data;
+
+    t.data = nullptr;
 }
 
 table& table::operator= (const table& t) //оператор присваивания
@@ -47,6 +62,17 @@ table& table::operator= (const table& t) //оператор присваиван
             strcpy(data[i].data, t.data[i].data);
         }
     }
+    return *this;
+}
+
+table& table::operator=(table&& t)
+{
+    destroy();
+    count = t.count;
+    size = t.size;
+    data = t.data;
+    t.data = nullptr;
+
     return *this;
 }
 
